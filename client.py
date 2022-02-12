@@ -14,5 +14,14 @@ def receive():
             #if client has left the chat it may raise error
             break
 
-def send(): 
-    pass
+def send(event=None):
+    #event is passed by binders.
+    msg = my_msg.get()
+    my_msg.set("") #clearing the input field
+    client_socket.send(bytes(msg, "utf8"))
+    if msg == "{QUIT}":
+        client_socket.close()
+        top.quit()
+
+ 
+    
