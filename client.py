@@ -1,5 +1,6 @@
 from http import client
 import socket
+import threading
 import tkinter
 
 HOST = "192.168.56.1"
@@ -36,7 +37,7 @@ def on_closing(event=None):
     
 
 top = tkinter.Tk()
-top.title("Chatter")
+top.title("Chatting...")
 
 messages_frame = tkinter.Frame(top)
 my_msg = tkinter.StringVar()  # For the messages to be sent.
@@ -55,3 +56,7 @@ entry_field.pack()
 send_button = tkinter.Button(top, text="Send", command=send)
 send_button.pack()
 top.protocol("WM_DELETE_WINDOW", on_closing)
+
+receive_thread = threading.Thread(target=receive)
+receive_thread.start()
+tkinter.mainloop()
