@@ -52,4 +52,11 @@ def broadcast(msg, prefix=""):
 
 
 
-    
+if __name__ == "__main__":
+    server.listen(5) #listens for max 5 connections
+    print("Server is listening..")
+    ACCEPT_THREAD  = threading.Thread(target=accept_incoming_connections)
+    ACCEPT_THREAD.start()
+    ACCEPT_THREAD.join() # to make main script wait till the thread is running
+    server.close()
+
