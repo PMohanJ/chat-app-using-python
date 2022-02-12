@@ -1,7 +1,7 @@
 import socket
 import threading
 
-clinets = {}
+clients = {}
 addresses = {}
 
 HOST = socket.gethostbyname(socket.gethostname())
@@ -21,3 +21,11 @@ def accept_incoming_connections():
         thread = threading.Thread(target=handle_client, args=(client,))
         thread.start()
 
+def handle_client(client): #taking client socket as arg
+    name  = client.recv(BUFSIZ).decode("utf8")
+    welcome = "Welcome {}! if wanted to quit type QUIT".format(name)
+    client.send(bytes(welcome, "utf8"))
+    msg = "{} had joined the chat".format(name)
+    broadcast(bytes(msg, "utf8"))
+    clients[client] = name
+    
