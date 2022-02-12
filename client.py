@@ -26,7 +26,7 @@ def send(event=None):
     msg = my_msg.get()
     my_msg.set("") #clearing the input field
     client_socket.send(bytes(msg, "utf8"))
-    if msg == "{QUIT}":
+    if msg == "{quit}":
         client_socket.close()
         top.quit()
 
@@ -57,6 +57,7 @@ send_button = tkinter.Button(top, text="Send", command=send)
 send_button.pack()
 top.protocol("WM_DELETE_WINDOW", on_closing)
 
+#creating a new thread for receiving messages
 receive_thread = threading.Thread(target=receive)
 receive_thread.start()
 tkinter.mainloop()
