@@ -26,22 +26,22 @@ def handle_client(client): #taking client socket as arg
        types 'quit' his connetion will be closed. 
     """
     name  = client.recv(BUFSIZ).decode("utf8")
-    welcome = "Welcome {}! if wanted to quit type QUIT".format(name)
+    welcome = "Welcome {}! if wanted to quit type quit".format(name)
     client.send(bytes(welcome, "utf8"))
     msg = "{} had joined the chat".format(name)
     broadcast(bytes(msg, "utf8"))
     clients[client] = name
 
-    while True:
+    connected = True
+    while connected:
         msg = client.recv(BUFSIZ)
-        if msg != bytes("{QUIT}", "utf8"):
+        if msg != bytes("{quit}", "utf8"):
             broadcast(msg, name+": ")
         else:
-            client.send(bytes("{QUIT}", "utf8"))
             client.close()
             del clients[client]
             broadcast(bytes("{} has left the chat".format(name), "utf8"))
-            break
+            connected = False
 
 
 def broadcast(msg, prefix=""):
@@ -49,7 +49,6 @@ def broadcast(msg, prefix=""):
     #this func sends msg to all clients
     for sock in clients:
         sock.send(bytes(prefix, "utf8")+msg)
-
 
 
 if __name__ == "__main__":
